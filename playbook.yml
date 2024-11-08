@@ -1,0 +1,49 @@
+- name: Wdrozenie aplikacji pełne
+  hosts: local
+  connection: local
+  become: true
+  roles: 
+    - geerlingguy.docker
+  vars:
+    deployment_path: "/home/ubuntu/app"
+    compose_path: "./docker-compose.yml"
+
+  tasks:
+    - name: Install and configure pip3 and htop
+      package:
+        name: 
+          - python3-pip
+        state: latest
+
+    - name: apt_get update
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        cache_valid_time: 3600
+
+    - name: install docker stuff
+      pip:
+        name:
+        - docker<7.0
+        - docker-compose
+        - requests==2.31.0
+    
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ deployment_path }}"
+        state: directory
+
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: /home/panda/AktualneRepo/App_of_apps/docker-compose.yml
+        dest: "{{ deployment_path }}"
+    
+    
+    - name: Docker compose
+      docker_compose:
+        project_src: "{{ deployment_path }}"
+      environment:
+        FRONTEND_IMAGE: "{{ lookup('env','FRONTEND_IMAGE') }}"
+        BACKEND_IMAGE:  "{{ lookup('env','BACKEND_IMAGE') }}"
+
+    
