@@ -8,6 +8,12 @@ pipeline {
     agent {
         label 'agent'
     }
+
+    environment {
+        PIP_BREAK_SYSTEM_PACKAGES = 1
+    }
+
+
     stages {
         stage('Get Code!') {
             steps {
@@ -28,7 +34,7 @@ pipeline {
                     }
 }
 
-        stage('Deploy applcation'){
+        stage('Deploy application'){
             steps {
                 script {
                     withEnv(["FRONTEND_IMAGE=$frontendImage:$frontendDockerTag", 
@@ -38,6 +44,15 @@ pipeline {
             }
         }
     }
+        stages {
+            stage('Selenium tests') {
+                steps {
+                        sh "pip3 install -r test/selenium/requirements.txt"
+                        sh "python3 -m pytest test/selenium/frontendTest.py"
+                    }
+                }
+            }
+
   }
 
             post {
