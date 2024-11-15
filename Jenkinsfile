@@ -22,13 +22,12 @@ pipeline {
             }
         }
 
-        stage('Clean old containers that might be running'){
+        stage('Clean running containers') {
             steps {
-                
-                   sh docker rm -f backend frontend
-                
-            }
-        }
+                    sh "docker rm -f frontend backend"
+                    }
+}
+
         stage('Deploy applcation'){
             steps {
                 script {
