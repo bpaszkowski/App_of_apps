@@ -21,5 +21,31 @@ pipeline {
                 }
             }
         }
+
+        stage('Clean old containers that might be running'){
+            steps {
+                
+                   sh docker rm -f backend frontend
+                
+            }
+        }
+        stage('Deploy applcation'){
+            steps {
+                script {
+                    withEnv(["FRONTEND_IMAGE=$frontendImage:$frontendDockerTag", 
+                             "BACKEND_IMAGE=$backendImage:$backendDockerTag"]) {
+                            sh "docker-compose up -d"
+                }
+            }
+        }
     }
+
+        post {
+            always {
+                    sh "docker-compose down"
+                    cleanWs()
+                }
+            }
+
+
 }
