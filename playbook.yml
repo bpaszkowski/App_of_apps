@@ -34,7 +34,7 @@
 
     - name: Copy file with owner and permissions
       ansible.builtin.copy:
-        src: /home/panda/AktualneRepo/App_of_apps/docker-compose.yml
+        src: "{{ compose_path }}"
         dest: "{{ deployment_path }}"
     
     
