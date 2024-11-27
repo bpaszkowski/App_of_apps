@@ -57,7 +57,18 @@ pipeline {
 ///////////////////////// Tutaj wrzucic sobie Run terraform a potem run ansible w tej kolejnosci
 
 
-
+        stage('Run terraform') {
+            steps {
+                dir('Terraform') {                
+                    git branch: 'main', url: 'https://github.com/bartoszpaszkowski/Terraform'
+                    withAWS(credentials:'AWS', region: 'us-east-1') {
+                            sh 'terraform init -backend-config=bucket=bartosz-paszkowski-panda-devops-core-19'
+                            sh 'terraform apply -auto-approve -var bucket_name=bartosz-paszkowski-panda-devops-core-19'
+                            
+                    } 
+                }
+            }
+        }
 
 
 
