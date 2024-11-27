@@ -1,6 +1,5 @@
 - name: Wdrozenie aplikacji pełne
-  hosts: local
-  connection: local
+  hosts: all
   become: true
   roles: 
     - geerlingguy.docker
