@@ -9,6 +9,10 @@ pipeline {
         label 'agent'
     }
 
+    tools {
+        Terraform
+        }
+
     environment {
         PIP_BREAK_SYSTEM_PACKAGES = 1
     }
@@ -50,6 +54,12 @@ pipeline {
                     sh "python3 -m pytest test/selenium/frontendTest.py"
                 }
   }
+///////////////////////// Tutaj wrzucic sobie Run terraform a potem run ansible w tej kolejnosci
+
+
+
+
+
 
   }
 
